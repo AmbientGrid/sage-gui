@@ -69,10 +69,23 @@ const dev: Config = {
   // jenkins: 'https://jenkins-dev.sagecontinuum.org'
 }
 
-
+const local: Config = {
+  ...prod,
+  beehive: '/beehive/api/v1',
+  beekeeper: '',
+  auth: '',
+  ecr: '',
+  es: '',
+  deviceRegistration: '',
+  home: '',
+  portal: '',
+  adminURL: '',
+  disableMaps: true,
+}
 
 const config: Config = {
-  ...(process.env.SAGE_UI_SERVICE_CONFIG == 'dev' ? dev : prod),
+  ...(process.env.SAGE_UI_SERVICE_CONFIG == 'local' ? local :
+      process.env.SAGE_UI_SERVICE_CONFIG == 'dev' ? dev : prod),
   disableMaps: false,
   noticeURL: 'https://raw.githubusercontent.com/waggle-sensor/portal-notice/main/notice.json'
   /*

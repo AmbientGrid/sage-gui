@@ -13,6 +13,8 @@ import ChartIcon from '@mui/icons-material/TimelineRounded'
 import ChartBrowserIcon from '@mui/icons-material/QueryStatsRounded'
 import MyJobsIcon from '@mui/icons-material/Engineering'
 import AddIcon from '@mui/icons-material/AddRounded'
+import ScienceIcon from '@mui/icons-material/ScienceRounded'
+import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroidRounded'
 
 import MetaRoute from '/components/Meta'
 import NavBar, { NavItems } from '/components/nav-bar/NavBar'
@@ -157,6 +159,26 @@ const NavMenu = () => {
               icon={<ChartBrowserIcon/>}
               to="/query-browser"
               label="Query Browser"
+            />
+          </>
+        }
+      />
+      <NavItem
+        label="Demo"
+        root="/demo"
+        menu={
+          <>
+            <Item
+              icon={<ScienceIcon/>}
+              component="a"
+              href="/demo"
+              label="Sensor Input"
+            />
+            <Item
+              icon={<PhoneAndroidIcon/>}
+              component="a"
+              href="/demo/phone-monitor"
+              label="Phone Accelerometer"
             />
           </>
         }
