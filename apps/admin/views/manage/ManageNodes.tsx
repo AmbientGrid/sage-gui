@@ -5,11 +5,11 @@
  * and action buttons (register, assign, deploy WES).
  */
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
 import Button from '@mui/material/Button'
 import Alert from '@mui/material/Alert'
+import Chip from '@mui/material/Chip'
 import AddIcon from '@mui/icons-material/AddCircleOutline'
 
 import Table, { type Column } from '/components/table/Table'
@@ -18,28 +18,44 @@ import { useProgress } from '/components/progress/ProgressProvider'
 import * as BKAdmin from '/components/apis/beekeeperAdmin'
 import type { Node } from '/components/apis/beekeeperAdmin'
 
+import RegisterNodeDialog from './RegisterNodeDialog'
+
 
 const columns: Column[] = [
   {
     id: 'id',
     label: 'Node ID',
-    format: (val: string, row: Node) => (
-      <a href={`/manage/nodes/${row.id}`}>{val}</a>
+    format: (val: string) => (
+      <a href={`/manage/nodes/${val}`}>{val}</a>
     ),
   },
   { id: 'vsn', label: 'VSN' },
-  { id: 'beehive', label: 'Beehive' },
-  { id: 'mode', label: 'Mode' },
+  {
+    id: 'beehive',
+    label: 'Beehive',
+    format: (val: string | null) => val || <span style={{ color: '#999' }}>unassigned</span>,
+  },
+  {
+    id: 'mode',
+    label: 'Mode',
+    format: (val: string | null) =>
+      val ? <Chip label={val} size="small" variant="outlined" /> : '—',
+  },
   { id: 'name', label: 'Name' },
   { id: 'address', label: 'Address' },
+  {
+    id: 'registration_event',
+    label: 'Registered',
+    format: (val: string | null) => val ? new Date(val).toLocaleString() : '—',
+  },
 ]
 
 
 export default function ManageNodes() {
-  const navigate = useNavigate()
   const { setLoading } = useProgress()
   const [nodes, setNodes] = useState<Node[]>([])
   const [error, setError] = useState<string | null>(null)
+  const [showRegister, setShowRegister] = useState(false)
 
   useEffect(() => {
     fetchNodes()
@@ -65,7 +81,7 @@ export default function ManageNodes() {
         <Button
           variant="contained"
           startIcon={<AddIcon />}
-          onClick={() => navigate('/manage/nodes/register')}
+          onClick={() => setShowRegister(true)}
         >
           Register Node
         </Button>
@@ -80,6 +96,13 @@ export default function ManageNodes() {
         enableSorting
         enableDownload
       />
+
+      {showRegister && (
+        <RegisterNodeDialog
+          onClose={() => setShowRegister(false)}
+          onSuccess={fetchNodes}
+        />
+      )}
     </Root>
   )
 }

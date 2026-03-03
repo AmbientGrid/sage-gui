@@ -5,7 +5,6 @@
  * create/delete actions.
  */
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
 import Button from '@mui/material/Button'
@@ -18,13 +17,15 @@ import { useProgress } from '/components/progress/ProgressProvider'
 import * as BKAdmin from '/components/apis/beekeeperAdmin'
 import type { Beehive } from '/components/apis/beekeeperAdmin'
 
+import CreateBeehiveDialog from './CreateBeehiveDialog'
+
 
 const columns: Column[] = [
   {
     id: 'id',
     label: 'Beehive ID',
-    format: (val: string, row: Beehive) => (
-      <a href={`/manage/beehives/${row.id}`}>{val}</a>
+    format: (val: string) => (
+      <a href={`/manage/beehives/${val}`}>{val}</a>
     ),
   },
   { id: 'key-type', label: 'Key Type' },
@@ -36,10 +37,10 @@ const columns: Column[] = [
 
 
 export default function ManageBeehives() {
-  const navigate = useNavigate()
   const { setLoading } = useProgress()
   const [beehives, setBeehives] = useState<Beehive[]>([])
   const [error, setError] = useState<string | null>(null)
+  const [showCreate, setShowCreate] = useState(false)
 
   useEffect(() => {
     fetchBeehives()
@@ -65,7 +66,7 @@ export default function ManageBeehives() {
         <Button
           variant="contained"
           startIcon={<AddIcon />}
-          onClick={() => {/* TODO: open CreateBeehiveDialog */}}
+          onClick={() => setShowCreate(true)}
         >
           Create Beehive
         </Button>
@@ -80,6 +81,13 @@ export default function ManageBeehives() {
         enableSorting
         enableDownload
       />
+
+      {showCreate && (
+        <CreateBeehiveDialog
+          onClose={() => setShowCreate(false)}
+          onSuccess={fetchBeehives}
+        />
+      )}
     </Root>
   )
 }
