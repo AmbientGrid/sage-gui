@@ -23,6 +23,8 @@ import ConfirmationDialog from '/components/dialogs/ConfirmationDialog'
 import * as BKAdmin from '/components/apis/beekeeperAdmin'
 import type { NodeCredentials } from '/components/apis/beekeeperAdmin'
 
+import RotateCredentialsDialog from './RotateCredentialsDialog'
+
 
 type Props = {
   nodeId: string
@@ -34,7 +36,7 @@ export default function CredentialsCard({ nodeId }: Props) {
   const [error, setError] = useState<string | null>(null)
   const [actionMsg, setActionMsg] = useState<string | null>(null)
   const [confirmRevoke, setConfirmRevoke] = useState(false)
-  const [confirmRotate, setConfirmRotate] = useState(false)
+  const [showRotate, setShowRotate] = useState(false)
 
   useEffect(() => {
     fetchCredentials()
@@ -67,10 +69,9 @@ export default function CredentialsCard({ nodeId }: Props) {
     }
   }
 
-  async function handleRotate() {
-    // Generate a placeholder — in production this would use ssh-keygen or similar
-    // For now, the API requires private+public key pair to be provided
-    setError('Credential rotation requires generating a new SSH keypair. Use the CLI: ssh-keygen -t rsa-sha2-256')
+  function handleRotateSuccess() {
+    setActionMsg('Credentials rotated successfully')
+    fetchCredentials()
   }
 
   function handleDownload() {
@@ -128,7 +129,7 @@ export default function CredentialsCard({ nodeId }: Props) {
                 size="small"
                 color="warning"
                 startIcon={<RotateLeftIcon />}
-                onClick={() => setConfirmRotate(true)}
+                onClick={() => setShowRotate(true)}
               >
                 Rotate
               </Button>
@@ -157,14 +158,11 @@ export default function CredentialsCard({ nodeId }: Props) {
         />
       )}
 
-      {confirmRotate && (
-        <ConfirmationDialog
-          title="Rotate Credentials"
-          content={<>This will delete existing credentials for <b>{nodeId}</b> and require a new keypair. The node will need to be re-provisioned.</>}
-          confirmBtnText="Rotate"
-          cancelBtn
-          onConfirm={handleRotate}
-          onClose={() => setConfirmRotate(false)}
+      {showRotate && (
+        <RotateCredentialsDialog
+          nodeId={nodeId}
+          onClose={() => setShowRotate(false)}
+          onSuccess={handleRotateSuccess}
         />
       )}
     </Card>
