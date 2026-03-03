@@ -23,6 +23,8 @@ type Config = {
   officeHours: string
   labs: string
 
+  chirpstack?: string
+
   disableMaps?: boolean
   notice?: Notice    // optional notice banner displayed site-wide
   noticeURL?: string // optional banner config pulled from github
@@ -80,6 +82,7 @@ const local: Config = {
   home: '',
   portal: '',
   adminURL: '',
+  chirpstack: 'http://localhost:8082',
   disableMaps: true,
 }
 

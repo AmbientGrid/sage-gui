@@ -2,7 +2,8 @@
  * NodeManageDetail — admin node detail/action page.
  *
  * Shows node state, credentials, and provides actions:
- * assign beehive, deploy WES, sync VSN, manage credentials.
+ * assign beehive, deploy WES, sync VSN, manage credentials,
+ * decommission, and ChirpStack link.
  */
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
@@ -19,14 +20,18 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import HiveIcon from '@mui/icons-material/HiveOutlined'
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch'
 import SyncIcon from '@mui/icons-material/Sync'
+import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 
 import { useProgress } from '/components/progress/ProgressProvider'
+import config from '/config'
 
 import * as BKAdmin from '/components/apis/beekeeperAdmin'
 import type { Node } from '/components/apis/beekeeperAdmin'
 
 import AssignBeehiveDialog from './AssignBeehiveDialog'
 import DeployWESConfirmDialog from './DeployWESConfirmDialog'
+import CredentialsCard from './CredentialsCard'
+import DecommissionCard from './DecommissionCard'
 
 
 export default function NodeManageDetail() {
@@ -78,6 +83,11 @@ export default function NodeManageDetail() {
     setActionMsg('Action completed successfully')
   }
 
+  // ChirpStack gateway URL — maps node ID to ChirpStack device EUI
+  const chirpstackUrl = config.chirpstack
+    ? `${config.chirpstack}/#/gateways/${nodeId}`
+    : null
+
   return (
     <Root>
       <Button
@@ -127,7 +137,7 @@ export default function NodeManageDetail() {
             </CardContent>
           </Card>
 
-          <div className="flex" style={{ gap: 8 }}>
+          <div className="flex" style={{ gap: 8, marginBottom: 16 }}>
             <Button
               variant="outlined"
               startIcon={<HiveIcon />}
@@ -151,7 +161,22 @@ export default function NodeManageDetail() {
             >
               {syncing ? 'Syncing...' : 'Sync VSN'}
             </Button>
+            {chirpstackUrl && (
+              <Button
+                variant="outlined"
+                startIcon={<OpenInNewIcon />}
+                href={chirpstackUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                ChirpStack
+              </Button>
+            )}
           </div>
+
+          <CredentialsCard nodeId={nodeId!} />
+
+          <DecommissionCard nodeId={nodeId!} onComplete={handleActionSuccess} />
         </>
       )}
 
