@@ -61,7 +61,7 @@ export default function DecommissionCard({ nodeId, onComplete }: Props) {
       setActiveStep(1)
       await BKAdmin.logEntries([{
         node_id: nodeId,
-        operation: 'admin',
+        operation: 'insert',
         field_name: 'mode',
         field_value: 'decommissioned',
         source: 'admin-ui',
