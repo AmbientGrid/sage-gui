@@ -117,6 +117,7 @@ export default function BeehiveDetail() {
           color="error"
           startIcon={<DeleteIcon />}
           onClick={() => setConfirmDelete(true)}
+          aria-label={`Delete beehive ${beehiveId}`}
         >
           Delete
         </Button>
@@ -159,6 +160,7 @@ export default function BeehiveDetail() {
                       startIcon={<UploadIcon />}
                       onClick={() => triggerUpload(key)}
                       disabled={uploading}
+                      aria-label={`Upload ${label} credential file`}
                     >
                       Upload
                     </Button>

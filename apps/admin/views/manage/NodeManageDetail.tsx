@@ -172,6 +172,7 @@ export default function NodeManageDetail() {
                 href={chirpstackUrl}
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="Open ChirpStack gateway page for this node"
               >
                 ChirpStack
               </Button>
