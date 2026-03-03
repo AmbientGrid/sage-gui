@@ -29,13 +29,15 @@ type Props = {
 export default function AssignBeehiveDialog({ nodeId, currentBeehive, onClose, onSuccess }: Props) {
   const [beehiveId, setBeehiveId] = useState(currentBeehive || '')
   const [beehives, setBeehives] = useState<Beehive[]>([])
+  const [loadingBeehives, setLoadingBeehives] = useState(true)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     BKAdmin.getBeehives()
       .then(setBeehives)
-      .catch(err => setError('Failed to load beehives'))
+      .catch(() => setError('Failed to load beehives'))
+      .finally(() => setLoadingBeehives(false))
   }, [])
 
   async function handleAssign() {
@@ -72,6 +74,8 @@ export default function AssignBeehiveDialog({ nodeId, currentBeehive, onClose, o
           onChange={e => setBeehiveId(e.target.value)}
           fullWidth
           required
+          disabled={loadingBeehives}
+          helperText={loadingBeehives ? 'Loading beehives...' : ''}
           sx={{ mt: 1 }}
         >
           {beehives.map(bh => (

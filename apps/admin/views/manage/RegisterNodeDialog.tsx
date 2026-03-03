@@ -30,6 +30,7 @@ export default function RegisterNodeDialog({ onClose, onSuccess }: Props) {
   const [nodeId, setNodeId] = useState('')
   const [beehiveId, setBeehiveId] = useState('')
   const [beehives, setBeehives] = useState<Beehive[]>([])
+  const [loadingBeehives, setLoadingBeehives] = useState(true)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [result, setResult] = useState<RegisterResponse | null>(null)
@@ -38,6 +39,7 @@ export default function RegisterNodeDialog({ onClose, onSuccess }: Props) {
     BKAdmin.getBeehives()
       .then(setBeehives)
       .catch(() => { /* beehive list is optional */ })
+      .finally(() => setLoadingBeehives(false))
   }, [])
 
   const isValid = /^[0-9A-F]{16}$/.test(nodeId)
@@ -119,6 +121,8 @@ export default function RegisterNodeDialog({ onClose, onSuccess }: Props) {
           value={beehiveId}
           onChange={e => setBeehiveId(e.target.value)}
           fullWidth
+          disabled={loadingBeehives}
+          helperText={loadingBeehives ? 'Loading beehives...' : ''}
           sx={{ mb: 2 }}
         >
           <MenuItem value="">None — assign later</MenuItem>

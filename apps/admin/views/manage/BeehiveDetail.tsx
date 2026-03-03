@@ -66,8 +66,12 @@ export default function BeehiveDetail() {
 
   async function handleDelete() {
     if (!beehiveId) return
-    await BKAdmin.deleteBeehive(beehiveId)
-    navigate('/manage/beehives')
+    try {
+      await BKAdmin.deleteBeehive(beehiveId)
+      navigate('/manage/beehives')
+    } catch (err) {
+      setError(err instanceof BKAdmin.ApiError ? err.message : 'Failed to delete beehive')
+    }
   }
 
   function triggerUpload(field: keyof BeehiveCredentialFiles) {
