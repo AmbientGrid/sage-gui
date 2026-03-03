@@ -89,11 +89,12 @@ export default function NodeManageDetail() {
     : null
 
   return (
-    <Root>
+    <Root role="main" aria-label={`Node ${nodeId} management`}>
       <Button
         startIcon={<ArrowBackIcon />}
         onClick={() => navigate('/manage/nodes')}
         sx={{ mb: 2 }}
+        aria-label="Back to node list"
       >
         Back to Nodes
       </Button>
@@ -142,6 +143,7 @@ export default function NodeManageDetail() {
               variant="outlined"
               startIcon={<HiveIcon />}
               onClick={() => setShowAssign(true)}
+              aria-label="Assign beehive to this node"
             >
               Assign Beehive
             </Button>
@@ -150,6 +152,7 @@ export default function NodeManageDetail() {
               color="warning"
               startIcon={<RocketLaunchIcon />}
               onClick={() => setShowDeploy(true)}
+              aria-label="Deploy WES to this node"
             >
               Deploy WES
             </Button>
@@ -158,6 +161,7 @@ export default function NodeManageDetail() {
               startIcon={<SyncIcon />}
               onClick={handleSyncVSN}
               disabled={syncing}
+              aria-label="Sync VSN for this node"
             >
               {syncing ? 'Syncing...' : 'Sync VSN'}
             </Button>

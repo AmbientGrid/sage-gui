@@ -100,11 +100,12 @@ export default function BeehiveDetail() {
   }
 
   return (
-    <Root>
+    <Root role="main" aria-label={`Beehive ${beehiveId} management`}>
       <Button
         startIcon={<ArrowBackIcon />}
         onClick={() => navigate('/manage/beehives')}
         sx={{ mb: 2 }}
+        aria-label="Back to beehive list"
       >
         Back to Beehives
       </Button>
