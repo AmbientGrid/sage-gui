@@ -22,12 +22,19 @@ import SuryaStatus from './views/factory/Factory'
 import ImageTests from './views/tests/ImageTests'
 import DescriptionTests from './views/tests/DescriptionTests'
 
+import ManageNodes from './views/manage/ManageNodes'
+import NodeManageDetail from './views/manage/NodeManageDetail'
+import ManageBeehives from './views/manage/ManageBeehives'
+import BeehiveDetail from './views/manage/BeehiveDetail'
+
 import Metrics from './views/metrics/Metrics'
 import MetricsOverview from './views/metrics/Overview'
 import MetricsByFilters from './views/metrics/ByFilter'
 
 import MonitorIcon from '@mui/icons-material/MonitorHeartOutlined'
 import ImageIcon from '@mui/icons-material/ImageOutlined'
+import HiveIcon from '@mui/icons-material/HiveOutlined'
+import DeviceHubIcon from '@mui/icons-material/DeviceHub'
 
 import Timeline from './fiddle/TimelineFiddle'
 
@@ -57,6 +64,24 @@ const NavMenu = () => {
   return (
     <NavItems>
       <NavItem label="Nodes" to="/nodes?phase=deployed" />
+      <NavItem
+        label="Manage"
+        root="/manage"
+        menu={
+          <>
+            <Item
+              icon={<DeviceHubIcon/>}
+              to="/manage/nodes"
+              label="Nodes"
+            />
+            <Item
+              icon={<HiveIcon/>}
+              to="/manage/beehives"
+              label="Beehives"
+            />
+          </>
+        }
+      />
       <NavItem label="Factory" to="/surya" />
       <NavItem label="Metrics" to="/metrics/overview" />
       <NavItem label="Experiments" to="/ai/experiments" />
@@ -128,6 +153,11 @@ export default function App() {
                         <Route path="filters" element={<MetricsByFilters />} />
                       </Route>
 
+
+                      <Route path="manage/nodes" element={<ManageNodes />} />
+                      <Route path="manage/nodes/:nodeId" element={<NodeManageDetail />} />
+                      <Route path="manage/beehives" element={<ManageBeehives />} />
+                      <Route path="manage/beehives/:beehiveId" element={<BeehiveDetail />} />
 
                       <Route path="surya" element={<Navigate to="/surya/phase2" replace />} />
                       <Route path="surya/:phase" element={<SuryaStatus />} />

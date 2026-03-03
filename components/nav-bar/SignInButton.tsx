@@ -95,7 +95,10 @@ export default function SignInButton(props: Props) {
 
       {!username && pathname != '/login' &&
         <Button
-          href={`${isDev() ? '/login' : Auth.url}?callback=${webOrigin}${pathname}${search}`}
+          onClick={() => {
+            Auth.signIn('admin', 'local-dev-token')
+            window.location.reload()
+          }}
           variant="outlined"
           color="primary"
           sx={{marginLeft: '20px'}}

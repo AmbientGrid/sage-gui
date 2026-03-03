@@ -50,11 +50,18 @@ class Auth {
     const domain = host.includes('.') ?  `${host.slice(host.indexOf('.'))}` : host
     document.cookie = `sage_username=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;domain=${domain}`
     document.cookie = `sage_token=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;domain=${domain}`
+    // also clear without domain for localhost
+    document.cookie = `sage_username=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/`
+    document.cookie = `sage_token=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/`
 
     LS.rm('sage_username')
 
-    const signOutUrl = `${this.url}/portal-logout`
-    window.location.href = `${signOutUrl}/?callback=${webOrigin}`
+    if (this.url) {
+      const signOutUrl = `${this.url}/portal-logout`
+      window.location.href = `${signOutUrl}/?callback=${webOrigin}`
+    } else {
+      window.location.href = webOrigin
+    }
   }
 }
 
