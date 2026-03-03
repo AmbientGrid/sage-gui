@@ -23,7 +23,7 @@ import * as BKAdmin from '/components/apis/beekeeperAdmin'
 import type { Node } from '/components/apis/beekeeperAdmin'
 
 import RegisterNodeDialog from './RegisterNodeDialog'
-import AssignBeehiveDialog from './AssignBeehiveDialog'
+import BulkAssignDialog from './BulkAssignDialog'
 
 
 const REFRESH_INTERVAL = 30_000
@@ -191,9 +191,8 @@ export default function ManageNodes() {
       )}
 
       {bulkAssign && selected.size > 0 && (
-        <AssignBeehiveDialog
-          nodeId={Array.from(selected).join(', ')}
-          currentBeehive={null}
+        <BulkAssignDialog
+          nodeIds={Array.from(selected)}
           onClose={() => setBulkAssign(false)}
           onSuccess={() => {
             setSelected(new Set())

@@ -43,6 +43,7 @@ export default function BeehiveDetail() {
   const [error, setError] = useState<string | null>(null)
   const [actionMsg, setActionMsg] = useState<string | null>(null)
   const [confirmDelete, setConfirmDelete] = useState(false)
+  const [deleting, setDeleting] = useState(false)
   const [uploading, setUploading] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [uploadField, setUploadField] = useState<keyof BeehiveCredentialFiles | null>(null)
@@ -66,11 +67,14 @@ export default function BeehiveDetail() {
 
   async function handleDelete() {
     if (!beehiveId) return
+    setDeleting(true)
     try {
       await BKAdmin.deleteBeehive(beehiveId)
       navigate('/manage/beehives')
     } catch (err) {
       setError(err instanceof BKAdmin.ApiError ? err.message : 'Failed to delete beehive')
+    } finally {
+      setDeleting(false)
     }
   }
 
@@ -117,6 +121,7 @@ export default function BeehiveDetail() {
           color="error"
           startIcon={<DeleteIcon />}
           onClick={() => setConfirmDelete(true)}
+          disabled={deleting}
           aria-label={`Delete beehive ${beehiveId}`}
         >
           Delete

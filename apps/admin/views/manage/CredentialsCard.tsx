@@ -36,6 +36,7 @@ export default function CredentialsCard({ nodeId }: Props) {
   const [error, setError] = useState<string | null>(null)
   const [actionMsg, setActionMsg] = useState<string | null>(null)
   const [confirmRevoke, setConfirmRevoke] = useState(false)
+  const [revoking, setRevoking] = useState(false)
   const [showRotate, setShowRotate] = useState(false)
 
   useEffect(() => {
@@ -60,12 +61,15 @@ export default function CredentialsCard({ nodeId }: Props) {
   }
 
   async function handleRevoke() {
+    setRevoking(true)
     try {
       await BKAdmin.revokeNodeCredentials(nodeId)
       setCreds(null)
       setActionMsg('Credentials revoked')
     } catch (err) {
       setError(err instanceof BKAdmin.ApiError ? err.message : 'Revoke failed')
+    } finally {
+      setRevoking(false)
     }
   }
 
@@ -138,8 +142,9 @@ export default function CredentialsCard({ nodeId }: Props) {
                 color="error"
                 startIcon={<DeleteIcon />}
                 onClick={() => setConfirmRevoke(true)}
+                disabled={revoking}
               >
-                Revoke
+                {revoking ? 'Revoking...' : 'Revoke'}
               </Button>
             </div>
           </>
